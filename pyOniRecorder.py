@@ -12,7 +12,7 @@ height = 480
 fps = 30
 mirroring = True
 compression = False
-lenght = 300 #5 minutes
+length = 300 #5 minutes
 debug = True
 
 
@@ -43,13 +43,13 @@ def write_files(dev):
     rec.attach(depth_stream, compression)
     rec.attach(color_stream, compression)
     rec.start()
-    print("Recording started.. press ctrl+C to stop or wait " + str(lenght) + " seconds..")
+    print("Recording started.. press ctrl+C to stop or wait " + str(length) + " seconds..")
     start=time.time()
     depth_scale_factor = 0.05
     depth_scale_beta_factor = 0
     try:
         while True:
-            if (time.time()-start)>lenght:
+            if (time.time()-start)>length:
                 break
             if debug:
                 frame_color = color_stream.read_frame()
@@ -77,7 +77,7 @@ def write_files(dev):
     color_stream.stop()
 
 def readSettings():
-    global width,height,fps,mirroring,compression,lenght,debug
+    global width,height,fps,mirroring,compression,length,debug
     config = configparser.ConfigParser()
     config.read('settings.ini')
     width = int(config['camera']['width'])
@@ -85,7 +85,7 @@ def readSettings():
     fps = int(config['camera']['fps'])
     mirroring = config.getboolean('camera','mirroring')
     compression = config.getboolean('camera','compression')
-    lenght = int(config['camera']['lenght'])
+    length = int(config['camera']['length'])
     debug = config.getboolean('camera','debug')
 
 def main():
