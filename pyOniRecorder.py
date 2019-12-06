@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from datetime import datetime
 import time
 import argparse
@@ -71,7 +73,8 @@ def write_files(dev):
                 cv2.waitKey(1)
     except KeyboardInterrupt:
         pass
-    cv2.destroyAllWindows()
+    if debug:
+        cv2.destroyAllWindows()
     rec.stop()
     depth_stream.stop()
     color_stream.stop()
