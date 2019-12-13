@@ -40,8 +40,8 @@ def write_files(dev):
     depth_stream.start()
     color_stream.start()
 
-    actual_date = datetime.now().strftime("%Y%m%d-%H%M%S%f")[:-3]
-    rec = openni2.Recorder((actual_date + ".oni").encode('utf-8'))
+    current_date = datetime.now().strftime("%Y%m%d-%H%M%S%f")[:-3]
+    rec = openni2.Recorder(("Recordings/" + current_date + ".oni").encode('utf-8'))
     rec.attach(depth_stream, compression)
     rec.attach(color_stream, compression)
     rec.start()
