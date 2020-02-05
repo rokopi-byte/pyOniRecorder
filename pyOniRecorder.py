@@ -16,9 +16,10 @@ mirroring = True
 compression = False
 length = 300 #5 minutes
 debug = True
+dst = 'Recordings'
 
 
-def write_files(dev):
+def write_files(dev, dst):
 
     if debug:
         import cv2
@@ -41,7 +42,10 @@ def write_files(dev):
     color_stream.start()
 
     current_date = datetime.now().strftime("%Y%m%d-%H%M%S%f")[:-3]
-    rec = openni2.Recorder(("Recordings/" + current_date + ".oni").encode('utf-8'))
+    if not os.path.exists(dst):
+        os.mkdir(dst)
+        print("Directory ", dst, " Created ")
+    rec = openni2.Recorder((dst + '/' + current_date + ".oni").encode('utf-8'))
     rec.attach(depth_stream, compression)
     rec.attach(color_stream, compression)
     rec.start()
@@ -80,7 +84,7 @@ def write_files(dev):
     color_stream.stop()
 
 def readSettings():
-    global width,height,fps,mirroring,compression,length,debug
+    global width,height,fps,mirroring,compression,length,debug,dst
     config = configparser.ConfigParser()
     config.read('settings.ini')
     width = int(config['camera']['width'])
@@ -90,6 +94,8 @@ def readSettings():
     compression = config.getboolean('camera','compression')
     length = int(config['camera']['length'])
     debug = config.getboolean('camera','debug')
+    dst = config['system']['out_folder']
+
 
 def main():
 
@@ -111,7 +117,7 @@ def main():
     except Exception as ex:
         print("ERROR Unable to open the device: ",ex," device disconnected? \n")
         return
-    write_files(dev)
+    write_files(dev, dst)
     try:
         openni2.unload()
         print("Device unloaded \n")
